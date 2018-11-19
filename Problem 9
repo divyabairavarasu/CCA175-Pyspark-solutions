@@ -1,0 +1,39 @@
+PatientID,Name,DateOfBirth,LastVisitDate
+1001,Ah Teck,1991-12-31,2012-01-20
+1002,Kumar,2011-10-29,2012-09-20
+1003,Ali,2011-01-30,2012-10-21
+
+
+1. Find all the patients whose lastVisitDate between current time and '2012-09-15' 
+2. Find all the patients who born in 2011
+3. Find all the patients age
+4. List patients whose last visited more than 60 days ago
+5. Select patients 18 years old or younger
+
+hadoop fs -put /user/divyabairavarasu/sparksql3/patient.csv
+
+
+patients = sc.textFile("/user/divyabairavarasu/sparksql3/patient.csv")
+from pyspark.sql import Row
+patientsDF = patients.map(lambda x:Row(patientId=int(x.split(",")[0]),name=x.split(",")[1],dateOfBirth=x.split(",")[2],lastVisitDate=x.split(",")[3])).toDF()
+patientsDF.registerTempTable("patient")
+
+results = sqlContext.sql("SELECT * FROM patient")
+
+
+1)results = sqlContext.sql("SELECT * FROM patient where TO_DATE(CAST(UNIX_TIMESTAMP(lastVisitDate,'yyyy-mm-dd') as timestamp)) between '2012-09-15' and current_timestamp()")
+
+results.show()
+
+2)results = sqlContext.sql("SELECT * FROM patient where YEAR(dateOfBirth) = 2011")
+results.show()
+
+3)results = sqlContext.sql("SELECT name,dateOfBirth,datediff(current_date(),to_date(cast(unix_timestamp(dateOfBirth,'yyyy-mm-dd') as timestamp)))/365 as age FROM patient")
+results.show()
+
+4)results = sqlContext.sql("SELECT * FROM patient where datediff(current_date(),to_date(cast(unix_timestamp(dateOfBirth,'yyyy-mm-dd') as timestamp)))>60")
+ results.show()
+ 
+5) results = sqlContext.sql("SELECT * FROM patient where datediff(current_date(),to_date(cast(unix_timestamp(dateOfBirth,'yyyy-mm-dd') as timestamp)))<=18*365")
+results.show()
+
