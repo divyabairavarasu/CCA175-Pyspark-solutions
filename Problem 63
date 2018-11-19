@@ -1,0 +1,11 @@
+val a = sc.parallelize(List("dog", "tiger", "lion", "cat", "panther", "eagle"), 2) 
+val b = a.map(x => (x.length, x))
+
+Write a correct code snippet for operationl which will produce desired output, shown below.
+Array[(lnt, String}] = Array((4,lion), (3,dogcat), (7,panther), (5,tiger))
+
+
+a = sc.parallelize(list(["dog", "tiger", "lion", "cat", "panther", "eagle"]), 2) 
+b = a.map(lambda x:(len(x),x))
+b.collect()
+[(3, 'dog'), (5, 'tiger'), (4, 'lion'), (3, 'cat'), (7, 'panther'), (5, 'eagle')]
