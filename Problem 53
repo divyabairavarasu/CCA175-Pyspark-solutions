@@ -1,0 +1,16 @@
+val a = sc.parallelize(1 to 10, 3)
+operation1 b.collect
+Output 1
+Array[lnt] = Array(2, 4, 6, 8,10) operation2
+Output 2
+Array[lnt] = Array(1,2, 3)
+Write a correct code snippet for operation1 and operation2 which will produce desired output, shown above.
+
+
+a = sc.parallelize(range(1, 10), 3)
+
+evenNum=a.filter(lambda x:x%2==0).collect()
+[2, 4, 6, 8]
+
+firstThree=a.filter(lambda x:x<4).collect()
+[1,2, 3]
