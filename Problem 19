@@ -1,0 +1,55 @@
+You have been given following mysql database details as well as other info.
+user=retail_dba
+password=cloudera
+database=retail_db
+jdbc URL = jdbc:mysql://quickstart:3306/retail_db
+Now accomplish following activities.
+1. Import departments table from mysql to hdfs as textfile in departments_text directory. 
+2. Import departments table from mysql to hdfs as sequncefile in departments_sequence
+directory.
+3. Import departments table from mysql to hdfs as avro file in departments avro directory.
+4. Import departments table from mysql to hdfs as parquet file in departments_parquet directory.
+
+
+1.
+sqoop import \
+   --connect jdbc:mysql://ms.itversity.com:3306/retail_db \
+   --username retail_user \
+   --password itversity \
+   --table departments \
+   --target-dir /user/divyabairavarasu/departments_text \
+   --m 1 \
+   --as-textfile
+   
+2.  
+sqoop import \
+   --connect jdbc:mysql://ms.itversity.com:3306/retail_db \
+   --username retail_user \
+   --password itversity \
+   --table departments \
+   --target-dir /user/divyabairavarasu/departments_sequence \
+   --m 1 \
+   --as-sequencefile
+
+3.
+sqoop import \
+   --connect jdbc:mysql://ms.itversity.com:3306/retail_db \
+   --username retail_user \
+   --password itversity \
+   --table departments \
+   --target-dir /user/divyabairavarasu/departments_avro \
+   --m 1 \
+   --as-avrodatafile
+   
+   
+ 4.  
+ 
+ sqoop import \
+   --connect jdbc:mysql://ms.itversity.com:3306/retail_db \
+   --username retail_user \
+   --password itversity \
+   --table departments \
+   --target-dir /user/divyabairavarasu/departments_parquet \
+   --m 1 \
+   --as-parquetfile
+ 
