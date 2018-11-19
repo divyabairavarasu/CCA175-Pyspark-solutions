@@ -1,0 +1,10 @@
+val a = sc.parallelize(List("dog", "tiger", "lion", "cat", "spider", "eagle"), 2) val b = a.keyBy(_.length)
+operation1
+Write a correct code snippet for operationl which will produce desired output, shown below.
+Array[(lnt, Seq[String])] = Array((4,ArrayBuffer(lion)), (6,ArrayBuffer(spider)), (3,ArrayBuffer(dog, cat)), (5,ArrayBuffer(tiger, eagle)))
+
+
+animals = sc.parallelize(list(["dog", "tiger", "lion", "cat", "spider", "eagle"]), 2)
+
+words = animals.flatMap(lambda x: x.split(","))
+lenNwords = words.map(lambda x:(len(x),x))
