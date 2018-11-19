@@ -1,0 +1,39 @@
+You have been given MySQL DB with following details. You have been given following product.csv file
+product.csv
+productID,productCode,name,quantity,price
+1001,PEN,Pen Red,5000,1.23 
+1002,PEN,Pen Blue,8000,1.25 
+1003,PEN,Pen Black,2000,1.25 
+1004,PEC,Pencil 2B,10000,0.48 
+1005,PEC,Pencil 2H,8000,0.49 
+1006,PEC,Pencil HB,0,9999.99
+
+
+1. Create a Hive ORC table using SparkSql
+2. Load this data in Hive table.
+3. Create a Hive parquet table using SparkSQL and load data in it.
+
+   hadoop fs -put product.csv /user/divyabairavarasu/
+1. sqlContext.sql("create database db81_products_orc")
+   sqlContext.sql("use db81_products_orc")
+   sqlContext.sql("CREATE EXTERNAL TABLE IF NOT EXISTS product(productID int,productCode string,name string,quantity string,price float) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE LOCATION '/user/divyabairavarasu/product81/'")
+   sqlContext.sql("LOAD DATA INPATH '/user/divyabairavarasu/product.csv' OVERWRITE INTO TABLE product")
+   
+   sqlContext.sql("create table products_orc(productID string,productCode string,name string,quantity int,price float) STORED AS orc")
+   
+2.   sqlContext.sql("insert overwrite table products_orc select * from product")
+   
+ 
+
+3.sqlContext.sql("create EXTERNAL TABLE products_parquet(productID string,productCode string,name string,quantity int,price float) STORED AS parquet LOCATION '/user/divyabairavarasu/product81/product_parquet_table'")
+  
+  sqlContext.sql("insert overwrite table products_parquet select * from products_orc")
+  
+  results = sqlContext.sql("select * from products_orc")
+  results.show()
+  
+  results = sqlContext.sql("select * from products_parquet")
+  results.show()
+  
+
+ 
