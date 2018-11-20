@@ -1,0 +1,46 @@
+You have been given MySQL DB with following details.
+ user=retail_dba
+ password=cloudera
+ database=retail_db
+ table=retail_db.orders 
+ table=retail_db.order_items
+ jdbc URL = jdbc:mysql://quickstart:3306/retail_db
+ 
+ 
+ 
+Columns of products table : (product_id | product categoryid | product_name | product_description | product_price | product_image )
+Please accomplish following activities.
+1. Copy "retaildb.products" table to hdfs in a directory p93_products
+2. Filter out all the empty prices
+3. Sort all the products based on price in both ascending as well as descending order.
+4. Sort all the products based on price as well as product_id in descending order.
+5. Use the below functions to do data ordering or ranking and fetch top 10 elements top() takeOrdered() sortByKey()
+
+
+1)sqoop import \
+   --connect jdbc:mysql://quickstart:3306/retail_db \
+   --username retail_dba \
+   --password cloudera \
+   --table products \
+   --target-dir /user/divyabairavarasu/p93_products \
+   --m 1
+   
+2) productRDD = sc.textFile("/user/divyabairavarasu/p93_products")  
+    
+   noEmptyPrices = productRDD.filter(lambda x:len(x.split(",")[4]) > 0)
+   
+   Ascending 
+3)sortByProductPrice = noEmptyPrices.map(lambda x:(float(x.split(",")[4]),x.split(",")[2])).sortByKey()
+Descending
+sortByProductPrice = noEmptyPrices.map(lambda x:(-float(x.split(",")[4]),x.split(",")[2])).sortByKey()
+
+4)sortByProductPrice = noEmptyPrices.map(lambda x:(-float(x.split(",")[4]),x.split(",")[0])).sortByKey()
+
+
+
+5)sortByProductPrice = noEmptyPrices.top(10,key=lambda t:float(t.split(",")[4]))
+ sortByProductPrice = noEmptyPrices.takeOrdered(10,key=lambda t:-float(t.split(",")[4]))
+
+   
+   
+ 
