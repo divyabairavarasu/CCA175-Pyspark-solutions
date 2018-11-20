@@ -1,0 +1,20 @@
+You have to run your Spark application on yarn with each executor 20GB and number of executors should be 50. Please replace XXX, YYY, ZZZ
+export HADOOP_CONF_DIR=XXX ./bin/spark-submit \
+-class com.hadoopexam.MyTask \ xxx\
+-deploy-mode cluster \ # can be client for client mode YYY\
+222 \
+/path/to/hadoopexam.jar \
+1000
+
+
+
+
+spark-submit \
+  --master yarn \
+  --conf spark.ui.port=12889 \
+  --class com.hadoopexam.MyTask \
+  --deploy-mode cluster \
+  --num-executors 50 \
+  --executor-memory 512M \
+  /path/to/hadoopexam.jar 1000
+  
