@@ -1,0 +1,26 @@
+You have been given following mysql database details as well as other info.
+user=retail_dba
+password=cloudera
+database=retail_db
+jdbc URL = jdbc:mysql://quickstart:3306/retail_db
+Please accomplish following.
+1. Create a table in retailedb with following definition.
+CREATE table departments_export (department_id int(11), department_name varchar(45), created_date T1MESTAMP DEFAULT NOWQ);
+2. Now import the data from following directory into departments_export table, /user/cloudera/departments new
+
+
+mysql -u retail_user -h ms.itversity.com -p
+itversity
+
+use retail_export;
+
+CREATE table departments_export (department_id int(11), department_name varchar(45), created_date TIMESTAMP DEFAULT NOW());
+
+sqoop export \
+  --connect jdbc:mysql://ms.itversity.com:3306/retail_export \
+  --username retail_user \
+  --password itversity \
+  --table departments_export \
+  --export-dir /user/divyabairavarasu/departments_new \
+  --batch
+
