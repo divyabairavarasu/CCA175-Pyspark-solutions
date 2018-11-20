@@ -1,0 +1,18 @@
+ You have been given below code snippet.
+val a = sc.parallelize(List("dog", "tiger", "lion", "cat", "spider", "eagle"), 2)
+val b = a.keyBy(_.length)
+val c = sc.parallelize(List("ant", "falcon", "squid"), 
+ val d = c.keyBy(.length)
+ 
+ 
+ a = sc.parallelize(list(["dog", "tiger", "lion", "cat", "spider", "eagle"]), 2)
+ 
+ b = a.keyBy(lambda x:len(x))
+ 
+ c = sc.parallelize(list(["ant", "falcon", "squid"]))
+ 
+ d = c.keyBy(lambda x:len(x))
+ 
+ e=b.subtractByKey(d)
+
+
