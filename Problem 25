@@ -1,0 +1,84 @@
+You have been given below comma separated employee information. That needs to be added in /home/cloudera/flumetest/in.txt file 
+(to do tail source)
+
+sex,name,city 
+1,alok,mumbai 
+1,jatin,chennai
+1,yogesh,kolkata
+2,ragini,delhi 
+2,jyotsana,pune 
+1,valmiki,banglore
+
+
+Create a flume conf file using fastest non-durable channel, which write data in hive warehouse directory, in two separate tables called flumemaleemployee1 and flumefemaleemployee1
+(Create hive table as well for given data}. Please use tail source with /home/cloudera/flumetest/in.txt file.
+Flumemaleemployee1 : will contain only male employees data flumefemaleemployee1 : Will contain only woman employees data
+
+hive:
+use dbs_hadoopexam;
+CREATE TABLE flumemaleemployee1
+(
+sex_type int, name string, city string )
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','; 
+
+CREATE TABLE flumefemaleemployee1
+(
+sex_type int, name string, city string
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+
+flume17.conf
+
+# Name the components on this agent
+agent2.sources = tailsrc
+agent2.channels = mem1 mem2
+agent2.sinks = std1 std2
+
+# Describe/configure the source 
+agent2.sources.tailsrc.type = exec
+agent2.sources.tailsrc.command = tail -F /user/divyabairavarasu/flumetest/in.txt 
+agent2.sources.tailsrc.batchSize = 1
+
+## Describe regex_filter interceptor 
+agent2.sources.tailsrc.interceptors = i1 
+agent2.sources.tailsrc.interceptors.i1.type = regex_extractor 
+agent2.sources.tailsrc.interceptors.i1.regex = \\d
+agent2.sources.tailsrc.interceptors.i1.serializers = t1 
+agent2.sources.tailsrc.interceptors.i1.serializers.t1.name = type
+agent2.sources.tailsrc.selector.type = multiplexing 
+agent2.sources.tailsrc.selector.header = type 
+agent2.sources.tailsrc.selector.mapping.1 = mem1 
+agent2.sources.tailsrc.selector.mapping.2 = mem2
+
+agent2.sinks.std1.type = hdfs
+agent2.sinks.std1.channel = mem1
+agent2.sinks.std1.batchSize = 1
+agent2.sinks.std1.hdfs.path = /user/hive/warehouse/dbs_hadoopexam.db/flumemaleemployee1 
+agent2.sinks.std1.rollInterval = 0
+agent2.sinks.std1.hdfs.fileType = DataStream
+
+agent2.sinks.std2.type = hdfs
+agent2.sinks.std2.channel = mem2
+agent2.sinks.std2.batchSize = 1
+agent2.sinks.std2.hdfs.path = /user/hive/warehouse/dbs_hadoopexam.db/flumefemaleemployee1 
+agent2.sinks.std2.rollInterval = 0
+agent2.sinks.std2.hdfs.fileType = DataStream
+
+# Use a channel which buffers events in memory
+agent2.channels.mem1.type = memory 
+agent2.channels.meml.capacity = 100 
+agent2.channels.mem2.type = memory 
+agent2.channels.mem2.capacity = 100 
+agent2.sources.tailsrc.channels = mem1 mem2
+
+
+flume-ng agent --conf conf --conf-file flume17.conf --name agent2 
+
+
+
+
+
+
+
+
