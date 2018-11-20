@@ -1,0 +1,13 @@
+You have been given a spark scala application, which is bundled in jar named hadoopexam.jar.
+Your application class name is com.hadoopexam.MyTask
+You want that while submitting your application should launch a driver on one of the cluster node.
+
+Please complete the following command to submit the application
+
+
+spark-submit \
+  --master yarn \
+  --conf spark.ui.conf=12890 \
+  --class com.hadoopexam.MyTask \
+  --deploy-mode cluster \
+  HOME/lib/hadoopexam.jar 10
