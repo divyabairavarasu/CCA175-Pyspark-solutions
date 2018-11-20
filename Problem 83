@@ -1,0 +1,20 @@
+1. Select all the records with quantity >= 5000 and name starts with 'Pen'
+2. Select all the records with quantity >= 5000, price is less than 1.24 and name starts with 'Pen'
+3. Select all the records witch does not have quantity >= 5000 and name does not starts
+with 'Pen'
+ 4. Select all the products which name is 'Pen Red', 'Pen Black'
+ 5. Select all the products which has price BETWEEN 1.0 AND 2.0 AND quantity BETWEEN 1000 AND 2000
+ 
+ results = sqlContext.sql("use db_products_orc")
+ 
+ 1)results = sqlContext.sql("SELECT * FROM product_orc WHERE quantity >= 5000 AND name LIKE 'Pen%'")
+   results.show()
+   
+ 2)results = sqlContext.sql("SELECT * FROM product_orc WHERE quantity >= 5000 AND price < 1.24 AND name LIKE 'Pen %'")
+   results.show()
+   
+ 3)  results = sqlContext.sql("SELECT * FROM product_orc WHERE name in ('Pen Red', 'Pen Black')")
+ results.show()
+ 
+ 4) results = sqlContext.sql("SELECT * FROM product_orc WHERE price between 1.0 AND 2.0 and quantity BETWEEN 1000 AND 2000")
+ results.show()
