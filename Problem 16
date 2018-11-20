@@ -13,9 +13,9 @@ hive
 create table departments_hive(department_id int, department_name string);
 
 sqoop import \
-  --connect jdbc:mysql://ms.itversity.com:3306/retail_db \
-  --username retail_user \
-  --password itversity \
+  --connect jdbc:mysql://quickstart:3306/retail_db \
+  --username retail_dba \
+  --password cloudera \
   --table departments \
   --hive-import \
   --hive-overwrite \
