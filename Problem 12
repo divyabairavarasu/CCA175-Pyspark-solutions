@@ -1,0 +1,58 @@
+user=retail_dba
+password=cloudera
+database=retail_db
+jdbc URL = jdbc:mysql://quickstart:3306/retail_db
+Please accomplish following.
+1. Create a table in retailedb with following definition.
+CREATE table departments_new (department_id int(11), department_name varchar(45), created_date T1MESTAMP DEFAULT NOW());
+2. Now insert records from departments table to departments_new
+3. Now import data from departments_new table to hdfs.
+4. Insert following 5 records in departmentsnew table. Insert into departments_new values(110, "Civil" , null); Insert into departments_new values(111, "Mechanical" , null);
+Insert into departments_new values(112, "Automobile" , null); Insert into departments_new values(113, "Pharma" , null);
+Insert into departments_new values(114, "Social Engineering" , null);
+ 5. Now do the incremental import based on created_date column.
+ 
+ 
+ mysql -u retail_dba -h quickstart -p
+ cloudera
+ 
+ 
+ use retail_export;
+ 
+ 1)CREATE table departments_new (department_id int(11), department_name varchar(45), created_date TIMESTAMP DEFAULT NOW());
+ 
+ 2)insert into departments_new select * from departments;
+ 
+ 3)sqoop import \
+     --connect jdbc:mysql://quickstart:3306/retail_export \
+     --username retail_dba \
+     --password cloudera \
+     --table departments_new \
+     --target-dir /user/divyabairavarasu/departments_new \
+     --m 1 \
+     --split-by department_id
+    
+     
+ 4)  Insert into departments_new values(110, "Civil" , null); Insert into departments_new values(111, "Mechanical" , null);
+Insert into departments_new values(112, "Automobile" , null); Insert into departments_new values(113, "Pharma" , null);
+Insert into departments_new values(114, "Social Engineering" , null);
+
+5)sqoop import \
+     --connect jdbc:mysql://quickstart:3306/retail_export \
+     --username retail_dba \
+     --password cloudera \
+     --table departments_new \
+     --target-dir /user/divyabairavarasu/departments_new \
+     --m 1 \
+     --append \
+     --check-column created_date \
+     --incremental lastmodified \
+     --split-by department_id \
+     --last-value 2018-11-19 20:20:52
+     
+     
+   hadoop fs -tail /user/divyabairavarasu/departments_new/part-m-00001  
+     
+     
+ 
+ 
