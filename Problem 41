@@ -1,0 +1,23 @@
+
+Problem Scenario 70 : Write down a Spark Application using Python, In which it read a file "Content.txt" (On hdfs) with following content. Do the word count and save the results in a directory called "problem85" (On hdfs)
+Content.txt
+Hello this is ABCTECH.com This is XYZTECH.com
+Apache Spark Training
+This is Spark Learning Session Spark is faster than MapReduce
+
+content = sc.textFile("/user/divyabairavarasu/content/content.txt")
+
+nonemptylines = content.filter(lambda x: len(x) > 0)
+
+contentRDD = nonemptylines.flatMap(lambda x:x.split(" "))
+tuples =  contentRDD.map(lambda x:(x,1))
+from operator import add
+wordCounts = tuples.reduceByKey(add)
+final = wordCounts.map(lambda x:(x[1],x[0])).sortByKey(False)
+                     
+                    
+                    
+final.saveAsTextFile("/user/divyabairavarasu/content/problem85")        
+                    
+
+
