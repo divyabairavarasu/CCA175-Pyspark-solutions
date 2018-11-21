@@ -1,0 +1,18 @@
+You have been given following mysql database details as well as other info.
+Please accomplish following.
+1. Import joined result of orders and order_items table join on orders.order_id = order_items.order_item_order_id.
+2. Also make sure each tables file is partitioned in 2 files e.g. part-00000, part-00002 3. Also make sure you use orderid columns for sqoop to use for boundary conditions.
+
+
+sqoop import \
+  --connect jdbc:mysql://ms.itversity.com:3306/retail_db \
+  --username retail_user \
+  --password itversity \
+  --query "select * from orders o join order_items oi on o.order_id = oi.order_item_order_id and \$CONDITIONS" \
+  --num-mappers 2 \
+  --target-dir /user/divyabairavarasu/joined \
+  --split-by order_id 
+  
+  
+  hadoop fs -ls /user/divyabairavarasu/joined
+ 
