@@ -1,0 +1,43 @@
+In Continuation of previous question, please accomplish following activities.
+1. Select all the columns from product table with output header as below. productID AS ID code AS Code name AS Description price AS 'Unit Price'
+2. Select code and name both separated by ' -' and header name should be Product Description'.
+3. Select all distinct prices.
+4. Select distinct price and name combination.
+5. Select all price data sorted by both code and productID combination. 6. count number of products.
+7. Count number of products for each code.
+
+
+productid           	int
+productcode         	string
+name                	string
+quantity            	string
+price               	float
+
+
+sqlContext.sql("use db_products_orc")
+
+results = sqlContext.sql("select productid as ID,productcode as Code,name as Description,price AS UnitPrice from product_orc")
+
+results.show()
+
+results = sqlContext.sql("select concat(productcode,'-',name) as ProductDescription from product_orc")
+
+
+results = sqlContext.sql("select distinct(price) as Prices from product_orc")
+
+results = sqlContext.sql("select distinct price as Prices,name from product_orc")
+
+
+results = sqlContext.sql("select price from product_orc order by productcode,productid")
+
+results = sqlContext.sql("select count(productid) from product_orc")
+
+
+results.show()
+
+
+results = sqlContext.sql("select productcode,count(productid) as count from product_orc group by productcode")
+
+
+
+
